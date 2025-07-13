@@ -130,10 +130,8 @@ export const updateMedicineByIdService = async (id, rawData) => {
     throw error;
   }
 
-  console.log(parsed.data)
   const { medicine, generic, manufacturer } = parsed.data;
 
-  console.log(parsed.data);
 
   // if (
   //     (!medicine || Object.keys(medicine).length === 0) &&

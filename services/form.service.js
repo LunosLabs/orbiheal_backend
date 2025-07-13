@@ -38,7 +38,6 @@ export const getFormsPaginatedService = async (page, limit) => {
 
   const offset = (page - 1) * limit;
   const { data, error, count } = await getFormsPaginatedDB(offset, limit);
-  console.log(data);
   if (error) {
     const err = new Error(error.message || "Failed to fetch medicines.");
     err.statusCode = 500;
