@@ -1,6 +1,6 @@
 import {
   addNewMedicineService,
-  getMedicineByIdService,
+  getMedicineByIdService, getMedicinesPaginatedService,
   searchMedicinesService,
   updateMedicineByIdService,
 } from "../services/medicine.service.js";
@@ -38,11 +38,20 @@ export const updateMedicineController = async (req, res, next) => {
 export const getMedicineByIdController = async (req, res, next) => {
   try {
     const result = await getMedicineByIdService(req.params.id);
-    res.status(200).json({
-      message: "Medicine fetched successfully",
-      data: result,
-    });
+    res.status(200).json(result);
   } catch (error) {
     next(error);
   }
 };
+
+
+export const getMedicinesPaginatedController = async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 10;
+    const result = await getMedicinesPaginatedService(page, limit)
+    return res.status(200).json(result);
+  } catch(error){
+    next(error);
+  }
+}

@@ -2,8 +2,8 @@ import {medicineSchema, searchMedicinesSchema, updateMedicineRequestSchema} from
 import {
   addMedicineDB, getMedicineByIdDB,
   searchMedicinesDB, updateMedicineTableDB,
-  updateGenericTableDB, updateManufacturerTableDB,
-  getMedicineRecordByIdDB} from "../models/medicine.model.js";
+  updateGenericTableDB, updateManufacturerTableDB, getMedicinePaginatedDB,
+} from "../models/medicine.model.js";
 import {addPrefixToKeys} from "../utils/medicine.transform.js";
 
 
@@ -86,6 +86,32 @@ export const getMedicineByIdService = async (id) => {
 
   return data;
 };
+
+
+export const getMedicinesPaginatedService = async (page, limit) => {
+  if (page < 1 || limit < 1) {
+    const error = new Error("Invalid page or limit value.");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  const offset = (page - 1) * limit;
+  const {data, error, count} = await getMedicinePaginatedDB(offset, limit);
+
+  if (error) {
+    const err = new Error(error.message || "Failed to fetch medicines.");
+    err.statusCode = 500;
+    throw err;
+  }
+
+  return{
+    page,
+    limit,
+    total: count,
+    totalPages: Math.ceil(count / limit),
+    medicines: data,
+  }
+}
 
 
 export const updateMedicineByIdService = async (id, rawData) => {

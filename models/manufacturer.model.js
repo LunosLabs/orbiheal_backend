@@ -26,13 +26,17 @@ export const deleteManufacturerDB = async (id) => {
 
 // @-get single manufacturer data
 export const getManufacturerByIdDB = async (id) => {
-  return supabaseAdmin.from("manufacturers").select("*").eq("id", id).single();
+  return supabaseAdmin.
+  from("manufacturers")
+      .select("*").eq("id", id).single();
 };
 
 // @-get paginated list
 export const getManufacturersPaginatedDB = async (offset, limit) => {
   return supabaseAdmin
     .from("manufacturers")
-    .select("*", { count: "exact" })
+    .select("id, name", { count: "exact" })
     .range(offset, offset + limit - 1);
 };
+
+

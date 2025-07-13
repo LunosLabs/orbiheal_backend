@@ -48,8 +48,8 @@ app.use(cookieParser());
 // --- Routes
 app.use("/api/v1/medicine", medicineRoutes);
 app.use("/api/v1/manufacturer", manufacturersRoutes);
-app.use("/api/v1/generic", genericRoutes);
-app.use("/api/v1/form", formRoutes);
+app.use("/api/v1/generics", genericRoutes);
+app.use("/api/v1/forms", formRoutes);
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/orbi-ai", orbihealRoute);
 app.use("/api/v1/prescription", prescriptionRoutes);

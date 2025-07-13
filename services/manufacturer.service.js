@@ -10,7 +10,6 @@ import {
   updateManufacturerDB,
 } from "../models/manufacturer.model.js";
 
-
 export const addNewManufacturerService = async (data) => {
   const parsed = manufacturerSchema.safeParse(data);
 
@@ -35,10 +34,7 @@ export const addNewManufacturerService = async (data) => {
   };
 };
 
-
-
 export const updateManufacturerService = async (id, data) => {
-
   if (!id) {
     const error = new Error("Manufacturer ID is required.");
     error.statusCode = 400;
@@ -71,7 +67,6 @@ export const updateManufacturerService = async (id, data) => {
   };
 };
 
-
 export const deleteManufacturerService = async (id) => {
   if (!id) {
     const error = new Error("Manufacturer ID is required.");
@@ -93,7 +88,6 @@ export const deleteManufacturerService = async (id) => {
 
 // Get by ID service
 export const getManufacturerByIdService = async (id) => {
-
   if (!id) {
     const error = new Error("Manufacturer ID is required.");
     error.statusCode = 400;
@@ -107,12 +101,8 @@ export const getManufacturerByIdService = async (id) => {
     err.statusCode = 404;
     throw err;
   }
-
-  return {
-    manufacturer: data,
-  };
+  return data;
 };
-
 
 export const getManufacturersPaginatedService = async (page, limit) => {
   if (page < 1 || limit < 1) {
@@ -122,8 +112,11 @@ export const getManufacturersPaginatedService = async (page, limit) => {
   }
 
   const offset = (page - 1) * limit;
-  const { data, error, count } = await getManufacturersPaginatedDB(offset, limit);
-  
+  const { data, error, count } = await getManufacturersPaginatedDB(
+    offset,
+    limit
+  );
+
   if (error) {
     const err = new Error(error.message || "Failed to fetch manufacturers.");
     err.statusCode = 500;

@@ -13,11 +13,10 @@ export const getMedicineByIdDB = async (med_id) => {
 }
 
 export async function searchMedicinesDB(query) {
-  console.log(query)
   return supabaseAdmin
       .from('medicine_search_view')
       .select(`
-      medicine_id,
+      id,
       brand_name,
       generic_name,
       manufacturer_name,
@@ -31,14 +30,6 @@ export async function searchMedicinesDB(query) {
       .limit(10);
 }
 
-
-export const getMedicineRecordByIdDB = async (id) => {
-  return supabaseAdmin
-      .from("medicines")
-      .select("id, generic_id, manufacturer_id")
-      .eq("id", id)
-      .single();
-}
 
 // Update medicines table
 export const updateMedicineTableDB = async (id, medicine) => {
@@ -62,4 +53,22 @@ export const updateManufacturerTableDB = async (id, manufacturer) => {
       .from("manufacturers")
       .update(manufacturer)
       .eq("id", id);
+}
+
+
+export const getMedicinePaginatedDB = async (offset, limit) => {
+  return supabaseAdmin
+      .from('medicine_search_view')
+      .select(`
+      id,
+      brand_name,
+      generic_name,
+      manufacturer_name,
+      form_name,
+      strength,
+      min_price,
+      max_price,
+      regulatory_status
+    `, { count: "exact" })
+      .range(offset, offset + limit - 1);
 }
