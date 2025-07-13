@@ -1,0 +1,52 @@
+{
+  "id": "11111111-1111-1111-1111-111111111111",
+  "brand_name": "PainAway",
+  "generic_id": null,
+  "manufacturer_id": null,
+  "form_id": null,
+  "strength": "500mg",
+  "regulatory_status": "otc",
+  "age_group_suitability": ["adult", "elderly"],
+  "min_price": 10.5,
+  "max_price": 15.0,
+  "created_at": "2025-07-06T09:00:00Z",
+  "updated_at": "2025-07-06T09:00:00Z",
+
+  "details": {
+    "indication": "Relieves mild to moderate pain",
+    "dosage_instructions": "Take 1-2 tablets every 4-6 hours",
+    "administration_route": "Oral",
+    "onset_of_action": "15-30 minutes",
+    "duration_of_effect": "4-6 hours",
+    "created_at": "2025-07-06T09:00:00Z",
+    "updated_at": "2025-07-06T09:00:00Z"
+  },
+
+  "attributes": {
+    "warnings": [
+      { "note": "Do not exceed recommended dose" },
+      { "note": "Keep out of reach of children" }
+    ],
+    "contraindications": [
+      { "note": "Do not use if allergic to ibuprofen" }
+    ],
+    "interactions": [
+      { "note": "May interact with blood thinners" }
+    ],
+    "side_effects_common": [
+      { "note": "Nausea" },
+      { "note": "Dizziness" }
+    ],
+    "side_effects_serious": [
+      { "note": "Severe allergic reaction" }
+    ],
+    "precautions": [
+      { "note": "Avoid alcohol while taking this medicine" }
+    ],
+    "pro_tips": [
+      { "note": "Take with food to reduce stomach upset" }
+    ],
+    "created_at": "2025-07-06T09:00:00Z",
+    "updated_at": "2025-07-06T09:00:00Z"
+  }
+}
