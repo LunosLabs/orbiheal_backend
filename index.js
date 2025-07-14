@@ -54,17 +54,24 @@ app.use("/api/v1/manufacturer", manufacturersRoutes);
 app.use("/api/v1/generics", genericRoutes);
 app.use("/api/v1/forms", formRoutes);
 app.use("/api/v1/user", userRoutes);
-app.use("/api/v1/orbi-ai", orbihealRoute);
+app.use("/api/v1/orbi", orbihealRoute);
 app.use("/api/v1/prescription", prescriptionRoutes);
 
-// --- Error handler
+// --- Global error handler
 app.use((err, req, res, next) => {
-    console.error(err);
-    res.status(err.statusCode || 500).json({
-        error: err.message,
+    const statusCode = err.statusCode || 500;
+    if (statusCode >= 500) {
+        console.error("🔥 Internal Error:", err);
+    } else {
+        console.warn("⚠️ Client Error:", err.message);
+    }
+    res.status(statusCode).json({
+        success: false,
+        message: err.message || "Something went wrong.",
         details: err.details || undefined,
     });
 });
+
 
 // --- Start server
 app.listen(PORT, "0.0.0.0", () => {

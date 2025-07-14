@@ -1,4 +1,4 @@
-import { scanPrescriptionService } from "../orbiheal-ai/prescription.service.js";
+import { scanPrescriptionService } from "../orbiheal-services/prescription.service.js";
 
 export const aiPrescriptionScanController = async (req, res, next) => {
   try {

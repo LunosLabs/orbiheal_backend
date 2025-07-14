@@ -2,14 +2,22 @@ import { supabaseAdmin } from "../config/supabaseClient.js";
 
 //@post method adds new medicine
 export const addMedicineDB = async (medicineData) => {
-  return supabaseAdmin.rpc("add_medicine", medicineData);
+  return supabaseAdmin.rpc("add_new_medicine", medicineData);
 };
 
+//@get method fetches all medicine data
+export const getMedicineByIdDashboradDB = async (med_id) => {
+  return supabaseAdmin
+      .rpc("get_medicine_full_data", { med_id })
+}
 
 //@get method fetches all medicine data
-export const getMedicineByIdDB = async (med_id) => {
+export const getMedicineByIdDB = async (id) => {
   return supabaseAdmin
-      .rpc("get_medicine_by_id", { med_id })
+      .from("medicines")
+      .select('brand_name, is_verified, strength, regulatory_status, min_price, max_price, age_group_suitability')
+      .eq("id", id)
+      .single();
 }
 
 export async function searchMedicinesDB(query) {

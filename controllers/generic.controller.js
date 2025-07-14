@@ -1,5 +1,11 @@
-import {addNewGenericService, getGenericByIdService, getGenericsPaginatedService} from "../services/generic.service.js";
-import {supabaseAdmin} from "../config/supabaseClient.js";
+import {
+  addNewGenericService,
+  getGenericByIdService,
+  getGenericsPaginatedService,
+  deleteGenericService,
+  updateGenericService,
+} from "../services/generic.service.js";
+
 
 export const addNewGenericController = async (req, res, next) => {
   try {
@@ -9,6 +15,25 @@ export const addNewGenericController = async (req, res, next) => {
     next(error);
   }
 };
+
+export const updateGenericController = async (req, res, next) => {
+  try {
+    const result = await updateGenericService(req.params.id, req.body);
+    return res.status(201).json(result);
+  } catch (error){
+    next(error);
+  }
+}
+
+export const deleteGenericController = async (req, res, next) => {
+  try {
+    const result = await deleteGenericService(req.params.id);
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 
 export const getGenericByIdController = async (req, res, next) => {
   try {

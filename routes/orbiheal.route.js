@@ -1,9 +1,9 @@
 import express from 'express';
-import {aiFetchMedicineController} from "../controllers/orbiheal.controller.js";
+import {orbiAddMedicineController} from "../controllers/orbiheal.controller.js";
+
 
 const router = express.Router();
 
-router.post("/add",aiFetchMedicineController);
-
+router.post("/add/:entity", orbiAddMedicineController);
 
 export default router;

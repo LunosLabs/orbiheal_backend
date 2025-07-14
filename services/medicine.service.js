@@ -1,8 +1,6 @@
-import {medicineSchema, searchMedicinesSchema, updateMedicineRequestSchema} from "../schema/Medicine.schema.js";
+import {medicineSchema, searchMedicinesSchema} from "../schema/Medicine.schema.js";
 import {
-  addMedicineDB, getMedicineByIdDB,
-  searchMedicinesDB, updateMedicineTableDB,
-  updateGenericTableDB, updateManufacturerTableDB, getMedicinePaginatedDB,
+  addMedicineDB, getMedicineByIdDashboradDB, getMedicineByIdDB, getMedicinePaginatedDB, searchMedicinesDB
 } from "../models/medicine.model.js";
 import {addPrefixToKeys} from "../utils/medicine.transform.js";
 
@@ -21,9 +19,7 @@ export const addNewMedicineService = async (rawData) => {
   const dbInput = addPrefixToKeys(parsed.data);
 
   // Call DB function
-  const { data: responseData, error } = await addMedicineDB(dbInput);
-
-  console.log(error)
+  const { data, error } = await addMedicineDB(dbInput);
 
   if (error) {
     const err = new Error(error.message || "Failed to insert medicine");
@@ -33,9 +29,9 @@ export const addNewMedicineService = async (rawData) => {
 
   return {
     message: "Medicine inserted successfully",
-    medicine_id: responseData,
+    data,
   };
-};
+}
 
 
 export const searchMedicinesService = async (data) => {
@@ -70,7 +66,7 @@ export const getMedicineByIdService = async (id) => {
     throw err;
   }
 
-  const { data, error } = await getMedicineByIdDB(id);
+  const { data, error } = await getMedicineByIdDashboradDB(id);
 
   if (error) {
     const err = new Error(error.message || "Database error.");
@@ -88,7 +84,7 @@ export const getMedicineByIdService = async (id) => {
 };
 
 
-export const getMedicinesPaginatedService = async (page, limit) => {
+export const getMedicinePaginatedService = async (page, limit) => {
   if (page < 1 || limit < 1) {
     const error = new Error("Invalid page or limit value.");
     error.statusCode = 400;
@@ -96,25 +92,24 @@ export const getMedicinesPaginatedService = async (page, limit) => {
   }
 
   const offset = (page - 1) * limit;
-  const {data, error, count} = await getMedicinePaginatedDB(offset, limit);
-
+  const { data, error, count } = await getMedicinePaginatedDB(offset, limit);
   if (error) {
     const err = new Error(error.message || "Failed to fetch medicines.");
     err.statusCode = 500;
     throw err;
   }
 
-  return{
+  return {
     page,
     limit,
     total: count,
     totalPages: Math.ceil(count / limit),
-    medicines: data,
-  }
-}
+    medicine: data,
+  };
+};
 
 
-export const updateMedicineByIdService = async (id, rawData) => {
+export const getMedicineByIdAdminService = async (id) => {
 
   if (!id || typeof id !== 'string' || id.trim() === '') {
     const err = new Error("Invalid medicine ID.");
@@ -122,67 +117,19 @@ export const updateMedicineByIdService = async (id, rawData) => {
     throw err;
   }
 
-  const parsed = updateMedicineRequestSchema.safeParse(rawData);
-  if (!parsed.success) {
-    const error = new Error("Validation failed");
-    error.statusCode = 400;
-    error.details = parsed.error.flatten();
-    throw error;
+  const { data, error } = await getMedicineByIdDB(id);
+
+  if (error) {
+    const err = new Error(error.message || "Database error.");
+    err.statusCode = 500;
+    throw err;
   }
 
-  const { medicine, generic, manufacturer } = parsed.data;
+  if (!data) {
+    const err = new Error("Medicine not found.");
+    err.statusCode = 404;
+    throw err;
+  }
 
-
-  // if (
-  //     (!medicine || Object.keys(medicine).length === 0) &&
-  //     (!generic || Object.keys(generic).length === 0) &&
-  //     (!manufacturer || Object.keys(manufacturer).length === 0)
-  // ) {
-  //   const error = new Error("No valid update data provided");
-  //   error.statusCode = 400;
-  //   throw error;
-  // }
-  //
-  // // Get related IDs
-  // const { data: record, error: fetchError } = await getMedicineRecordByIdDB(id);
-  //
-  // console.log(fetchError)
-  // if (fetchError || !record) {
-  //   const error = new Error("Medicine not found");
-  //   error.statusCode = 404;
-  //   throw error;
-  // }
-  //
-  //
-  //
-  // const updatePromises = [];
-  //
-  // return res.status(200).json({
-  //   record
-  // })
-
-  // if (medicine && Object.keys(medicine).length) {
-  //   updatePromises.push(updateMedicineTableDB(id, medicine));
-  // }
-  //
-  // if (generic && Object.keys(generic).length) {
-  //   updatePromises.push(updateGenericTableDB(record.generic_id, generic));
-  // }
-  //
-  // if (manufacturer && Object.keys(manufacturer).length) {
-  //   updatePromises.push(updateManufacturerTableDB(record.manufacturer_id, manufacturer));
-  // }
-  //
-  // const results = await Promise.all(updatePromises);
-  // const failed = results.find((r) => r.error);
-  // if (failed) {
-  //   const error = new Error(failed.error.message || "Failed to update");
-  //   error.statusCode = 500;
-  //   throw error;
-  // }
-  //
-  // return {
-  //   message: "Medicine updated successfully",
-  //   medicine_id: id,
-  // };
+  return data;
 };

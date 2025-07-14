@@ -1,6 +1,10 @@
-import {addNewFormService, getFormsByIdService, getFormsPaginatedService} from "../services/form.service.js";
-import {getMedicinesPaginatedService} from "../services/medicine.service.js";
-import {getManufacturerByIdService} from "../services/manufacturer.service.js";
+import {
+  addNewFormService, deleteFormService,
+  getFormsByIdService,
+  getFormsPaginatedService,
+  updateFormService
+} from "../services/form.service.js";
+
 
 export const addNewFormController = async (req, res, next) => {
   try {
@@ -11,6 +15,32 @@ export const addNewFormController = async (req, res, next) => {
   }
 };
 
+export const updateFormController = async (req, res, next) => {
+  try {
+    const result = await updateFormService(req.params.id, req.body);
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteFormController = async (req, res, next) => {
+  try {
+    const result = await deleteFormService(req.params.id);
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getFormByIdController = async (req, res, next) => {
+  try {
+    const result = await getFormsByIdService(req.params.id);
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const getFormsPaginatedController = async (req, res, next) => {
   try {
@@ -24,11 +54,3 @@ export const getFormsPaginatedController = async (req, res, next) => {
 }
 
 
-export const getFormByIdController = async (req, res, next) => {
-  try {
-    const result = await getFormsByIdService(req.params.id);
-    return res.status(200).json(result);
-  } catch (error) {
-    next(error);
-  }
-};
